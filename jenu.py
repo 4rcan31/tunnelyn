@@ -44,6 +44,11 @@ def stop_tunnel(pid):
     subprocess.run(["kill", str(pid)])
     print(f"Stopped tunnel with PID {pid}")
 
+def verify_host(key, forwarding, vps):
+    print("Verifying host authenticity...")
+    command = f'ssh -o StrictHostKeyChecking=yes -i {key} root@{vps} "exit"'
+    subprocess.run(command, shell=True)
+
 def main():
     parser = argparse.ArgumentParser(description='Open and manage SSH tunnels')
     parser.add_argument('-k', '--key', type=str, help='Path to SSH private key (required)')
@@ -52,12 +57,15 @@ def main():
     parser.add_argument('--stop', type=int, metavar='PID', help='Stop tunnel by PID')
     parser.add_argument('--list', action='store_true', help='List active tunnels')
     parser.add_argument('--all', action='store_true', help='List all SSH processes, not just SSH tunnels')
+    parser.add_argument('--verify', action='store_true', help='Verify host authenticity and add to known hosts')
     args = parser.parse_args()
 
     if args.list:
         list_tunnels(all=args.all)
     elif args.stop:
         stop_tunnel(args.stop)
+    elif args.verify:
+        verify_host(args.key, args.forwarding, args.vps)
     elif args.key and args.forwarding and args.vps:
         open_port(args.key, args.forwarding, args.vps)
     else:
