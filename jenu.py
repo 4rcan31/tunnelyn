@@ -44,7 +44,7 @@ def stop_tunnel(pid):
     subprocess.run(["kill", str(pid)])
     print(f"Stopped tunnel with PID {pid}")
 
-def verify_host(key, forwarding, vps):
+def verify_host(key, vps):
     print("Verifying host authenticity...")
     command = f'ssh -o StrictHostKeyChecking=yes -i {key} root@{vps} "exit"'
     subprocess.run(command, shell=True)
@@ -65,7 +65,7 @@ def main():
     elif args.stop:
         stop_tunnel(args.stop)
     elif args.verify:
-        verify_host(args.key, args.forwarding, args.vps)
+        verify_host(args.key, args.vps)
     elif args.key and args.forwarding and args.vps:
         open_port(args.key, args.forwarding, args.vps)
     else:
