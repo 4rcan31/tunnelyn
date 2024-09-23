@@ -1,0 +1,8 @@
+[
+    {
+        "key": "/ruta/llave/ssh",
+        "vps": "<IP>",
+        "local_port": "<PORT LOCAL",
+        "remote_port": "PORT REMOTE"
+    }
+]
